@@ -20,10 +20,12 @@ Users can manually manage data or use natural language commands like "add John 2
 ```bash
 ├── models
 │   └── User.js
+├── node_modules
 ├── public
 │   ├── index.html
 │   ├── script.js
 │   └── style.css
+├── .env
 ├── server.js
 ├── package.json
 ├── package-lock.json
