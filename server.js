@@ -59,7 +59,7 @@ app.post("/ai", async (req, res) => {
     const response = await axios.post(
       "https://api.groq.com/openai/v1/chat/completions",
       {
-        model: "llama-3.1-8b-instant",
+        model: "llama-3.3-70b-versatile",
         messages: [
           {
             role: "system",
@@ -77,7 +77,8 @@ DELETE:
 {"action":"delete","name":"John"}
 
 EDIT:
-{"action":"edit","name":"John","age":25}
+{"action":"edit","nameBefore":"John","ageBefore":25,"nameAfter":"James","ageAfter":30}
+make sure to understand user's prompt query logically before putting in the json.
             `
           },
           { role: "user", content: prompt }
@@ -124,8 +125,16 @@ EDIT:
 
     if (result.action === "edit") {
       const updated = await User.updateMany(
-        { name: result.name },
-        { $set: { age: result.age } }
+        { 
+          name: result.nameBefore,
+          age: result.ageBefore
+        },
+        { $set: 
+          { 
+            name:result.nameAfter,
+            age: result.ageAfter 
+          } 
+        }
       );
 
       return res.json({ message: "updated", count: updated.modifiedCount });
