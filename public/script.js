@@ -1,5 +1,7 @@
 const API = "http://localhost:3000";
 
+let pendingAction = null;
+
 /* ---------------- MANUAL ADD ---------------- */
 
 async function addUser() {
@@ -65,8 +67,6 @@ async function sendAI() {
 
   try {
 
-    /* STEP 1: GET PREVIEW */
-
     const res = await fetch(API + "/ai-preview", {
 
       method: "POST",
@@ -95,24 +95,65 @@ async function sendAI() {
 
     console.log("PREVIEW:", data);
 
-    /* STEP 2: CONFIRM */
+    pendingAction = data.action;
 
-    const confirmed = confirm(
-      "Confirm this action:\n\n" +
-      JSON.stringify(data.action, null, 2)
-    );
+    showConfirmation(data.action);
 
-    if (!confirmed) {
+  } catch (err) {
 
-      errorBox.innerText = "Action cancelled";
+    errorBox.innerText = "Network error: " + err.message;
 
-      return;
+  }
 
-    }
+}
 
-    /* STEP 3: EXECUTE */
+/* ---------------- SHOW CONFIRMATION ---------------- */
 
-    const executeRes = await fetch(API + "/ai-confirm", {
+function showConfirmation(action) {
+
+  const confirmBox = document.getElementById("confirmBox");
+
+  const confirmText = document.getElementById("confirmText");
+
+  let text = "";
+
+  if (action.action === "add") {
+
+    text =
+      `I will add a new user named ${action.name} with age ${action.age}.`;
+
+  }
+
+  else if (action.action === "delete") {
+
+    text =
+      `I will delete all users named ${action.name}.`;
+
+  }
+
+  else if (action.action === "edit") {
+
+    text =
+      `I will change ${action.nameBefore} (${action.ageBefore}) ` +
+      `to ${action.nameAfter} (${action.ageAfter}).`;
+
+  }
+
+  confirmText.innerText = text;
+
+  confirmBox.classList.remove("hidden");
+
+}
+
+/* ---------------- CONFIRM ACTION ---------------- */
+
+async function confirmAction() {
+
+  const errorBox = document.getElementById("error");
+
+  try {
+
+    const res = await fetch(API + "/ai-confirm", {
 
       method: "POST",
 
@@ -120,23 +161,25 @@ async function sendAI() {
         "Content-Type": "application/json"
       },
 
-      body: JSON.stringify(data.action)
+      body: JSON.stringify(pendingAction)
 
     });
 
-    const executeData = await executeRes.json();
+    const data = await res.json();
 
-    if (!executeRes.ok) {
+    if (!res.ok) {
 
-      errorBox.innerText = executeData.message || "Execution failed";
+      errorBox.innerText = data.message || "Execution failed";
 
-      console.log(executeData);
+      console.log(data);
 
       return;
 
     }
 
-    console.log("EXECUTED:", executeData);
+    console.log("EXECUTED:", data);
+
+    hideConfirmation();
 
     loadUsers();
 
@@ -145,6 +188,26 @@ async function sendAI() {
     errorBox.innerText = "Network error: " + err.message;
 
   }
+
+}
+
+/* ---------------- CANCEL ACTION ---------------- */
+
+function cancelAction() {
+
+  pendingAction = null;
+
+  hideConfirmation();
+
+}
+
+/* ---------------- HIDE CONFIRMATION ---------------- */
+
+function hideConfirmation() {
+
+  document
+    .getElementById("confirmBox")
+    .classList.add("hidden");
 
 }
 

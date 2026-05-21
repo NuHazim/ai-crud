@@ -1,29 +1,48 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>AI CRUD</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+  <h2>Manual Input</h2>
 
-<h2>Manual Input</h2>
+  <input id="name" placeholder="Name">
+  <input id="age" placeholder="Age">
+  <button onclick="addUser()">Add</button>
 
-<input id="name" placeholder="Name">
-<input id="age" placeholder="Age">
-<button onclick="addUser()">Add</button>
+  <hr>
 
-<hr>
+  <h2>AI Command</h2>
 
-<h2>AI Command</h2>
+  <input id="aiInput" placeholder="e.g. add John 20">
+  <button onclick="sendAI()">Send AI</button>
 
-<input id="aiInput" placeholder="e.g. add John 20">
-<button onclick="sendAI()">Send AI</button>
-<div id="error" style="color:red;"></div>
-<hr>
+  <div id="error" style="color:red;"></div>
 
-<h2>Users</h2>
-<div id="users"></div>
+  <!-- CONFIRMATION BOX -->
 
-<script src="script.js"></script>
+  <div id="confirmBox" class="hidden">
+
+    <h3>AI Confirmation</h3>
+
+    <p id="confirmText"></p>
+
+    <button onclick="confirmAction()">Confirm</button>
+
+    <button onclick="cancelAction()">Cancel</button>
+
+  </div>
+
+  <hr>
+
+  <h2>Users</h2>
+
+  <div id="users"></div>
+
+  <script src="script.js"></script>
 </body>
+
 </html>

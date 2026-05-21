@@ -36,3 +36,32 @@ button:hover {
   margin: 5px 0;
   border-radius: 6px;
 }
+/* ---------------- CONFIRM BOX ---------------- */
+
+#confirmBox {
+
+  background: #1e293b;
+
+  padding: 20px;
+
+  margin-top: 20px;
+
+  border-radius: 10px;
+
+  border: 2px solid #38bdf8;
+
+}
+
+#confirmBox h3 {
+
+  margin-top: 0;
+
+  color: #38bdf8;
+
+}
+
+.hidden {
+
+  display: none;
+
+}
