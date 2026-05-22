@@ -12,7 +12,7 @@ Users can manually manage data or use natural language commands like "add John 2
 - MongoDB database integration
 - Simple frontend (HTML, CSS, JavaScript)
 - REST API backend with Express
-
+-will  add more in the future
 ---
 
 ## Project Structure
